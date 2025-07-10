@@ -1,52 +1,3 @@
----
-title: "Practical: Poisson regression in health"
-subtitle: "MEDISS 2025"
-authors:
-  - name: Kinh Nguyen, PhD
-    email: kinh.nguyen@uni-heidelberg.de
-    affiliations:
-      - ref: high
-affiliations:
-  - id: high
-    name: Heidelberg Institute for Global Health, <br>Heidelberg University
-execute: 
-  cache: true
-  echo: true
-  warning: false
-editor:
-  render-on-save: true
-date: today
-date-format: long
-format: 
-  revealjs:
-    theme: karto.scss
-    slide-number: c
-    toc: true
-    toc-depth: 2
-footer: "--- MEDISS 2025 ---"
-toc: false
-toc-depth: 1
-menu: false
-chalkboard: true
-license: "CC BY-SA"
-number-sections: true
-number-depth: 1
-slide-level: 2
-#title-slide-attributes:
-  # data-background-image: ./people-intro.svg
-  # data-background-opacity: ".1"
-  # data-background-color: "#F2F2F2"
-  # data-background-size: cover
-  # data-background-position: bottom left
-transition: fade
-callout-appearance: minimal
-bibliography: /Users/knguyen/zotero.bib
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE)
-```
-
 # Poisson regression recap
 
 - Discrete distribution, probability of a given number of events occurring in a fixed interval of time or space (count data)
@@ -98,7 +49,6 @@ x <- rnorm(n)      # A continuous predictor
 beta0 <- 0.5       # True intercept on the log-rate scale
 beta1 <- -0.8      # True effect of x on the log-rate
 
-# Calculate the mean count (mu). The linear predictor now models the RATE.
 # mu = exposure * rate
 # log(mu) = log(exposure) + log(rate)
 # log(rate) = beta0 + beta1 * x
@@ -288,26 +238,19 @@ ggplot(nc.sids) +
 
 Creating neighboring structure to inform the model
 
-::: .columns
-::: {.column width="40%"}
 ```{r image_nb}
 nc.sids$id <- 1:nrow(nc.sids)
 adj_matrix <- poly2nb(nc.sids)
 W <- nb2mat(adj_matrix, style = "B", zero.policy = TRUE)
 rownames(W) <- colnames(W) <- nc.sids$id
 ```
-:::
 
-::: {.column width="60%"}
 ```{r}
 #| label: fig-nbmt
 #| fig-cap: Neighboring matrix
 par(pty = "s")
 image(W)
 ```
-
-:::
-:::
 
 ## Fit the spatial (ICAR) model {.unlisted}
 
